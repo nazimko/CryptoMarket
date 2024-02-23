@@ -5,12 +5,20 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -23,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -48,6 +57,11 @@ fun CryptoDetailScreen(
 
     var cryptoItem by remember {
         mutableStateOf<Response<Crypto>>(Response.Loading())
+    }
+
+    val uriHandler = LocalUriHandler.current
+    var uri by remember {
+        mutableStateOf(String)
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -98,6 +112,22 @@ fun CryptoDetailScreen(
                         color = turkuaz,
                         textAlign = TextAlign.Center
                     )
+                    
+                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    Button(onClick = { uriHandler.openUri("https://www.coingecko.com/tr/coins/${selectedCrypto.id}".lowercase()) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp)
+                            .height(46.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                    ) {
+                        Icon(imageVector = Icons.Filled.ShoppingCart, contentDescription = "Buy",
+                            tint = Color.White)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "Buy This!", color = Color.White, fontSize = 16.sp)
+                    }
+
                 }
 
                 is Response.Error -> {
